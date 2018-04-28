@@ -1,4 +1,6 @@
 #!/bin/bash
+# Данный скрипт содаёт RAID 6 на предоствленных девайсах,
+# разбивает его на пять партиций и монтирует их по каталогам
 
 echo "Start creating RAID"
 echo " "
@@ -11,13 +13,13 @@ then
     echo "RIAD created succesfuly"
 else
     echo "RAID was not created"
-    break
 fi
 
 
-# Creating partitions
+# В цикле создаем партиции на предоставленном девайсе
 for part in {1..5}
 do
+# делаем так, что gdisk ожидает любой из предложенных симоволов (цифры и буквы)
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | gdisk /dev/md0
   n
 
