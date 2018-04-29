@@ -40,7 +40,7 @@ for i in $(seq 1 5); do sudo mkfs.ext4 /dev/md0p$i; done
 mkdir /u0{1,2,3,4,5}
 
 # Прописываем в /etc/fstab
-echo "Our new devices" >> /etc/fstab
+echo "#Our new devices" >> /etc/fstab
 for i in $(seq 1 5)
 do 
     echo `sudo blkid /dev/md0p$i | awk '{print $2}'` /u0$i ext4 defaults 0 0 >> /etc/fstab
