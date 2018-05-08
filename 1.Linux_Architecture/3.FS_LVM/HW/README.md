@@ -137,8 +137,8 @@ mount /home
 ### На нашей куче дисков попробовать поставить btrfs/zfs - с кешем, снэпшотами - разметить здесь каталог /opt
 
 ## btrfs
-Имеются 4 диска: sd{d,e,fg}
-Из их будет делать RAID10
+Имеются 4 диска: sd{d,e,f,g}
+Из их будем делать RAID10
 
 ```bash
 mkfs.btrfs -f -d raid10 -m raid10 /dev/sdd /dev/sde /dev/sdf /dev/sdg
@@ -161,10 +161,13 @@ btrfs filesystem usage /opt
 btrfs subvolume create /opt/data
 btrfs subvolume create /opt/data/orig
 echo "This is original file" > /opt/data/orig/file
+
 # Создаём snapshot
 btrfs subvolume snapshot /opt/data/orig/ /opt/data/backup
+
 # Листинг subvolume (узнаем ID для восстановления)
 btrfs subvolume list /opt
+
 # Делаем snapshot дефолтным томом
 # Перед этим поправим файлик, чтобы видеть изменения
 btrfs subvolume set-default 258 /opt
