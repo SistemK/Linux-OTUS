@@ -15,6 +15,7 @@ then
     echo "RIAD created succesfuly"
 else
     echo "RAID was not created"
+    exit 1
 fi
 
 
