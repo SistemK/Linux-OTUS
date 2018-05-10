@@ -3,4 +3,4 @@
 
 ## Домашки
 
-[Первая домашка](1.Linux_basics/HW)
+[Первая домашка](1.Linux_Architecture/1.Linux_basics/HW/README.md)
