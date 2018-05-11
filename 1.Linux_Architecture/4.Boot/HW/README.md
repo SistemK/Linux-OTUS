@@ -22,7 +22,7 @@ PV необходимо инициализировать с параметром
 
 1. В конце строки `^linux16` добавляем `rd.break`
 
-```
+```bash
 mount -o remount,rw /sysroot
 chroot /sysroot
 passwd root
@@ -134,7 +134,7 @@ PV необходимо инициализировать с параметром
 
 2. Добавляем репозиторий Александра с пропатченным Grub2
 
-```
+```bash
 yum install yum-utils -y && \
 yum-config-manager --add-repo https://yum.rumyantsev.com/centos/7/x86_64/
 ```

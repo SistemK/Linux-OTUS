@@ -25,7 +25,7 @@ in webinars-201804
 # Однострочники
 
 ### Ищем строку в файлах
-```
+```bash
 grep -r -- "$search" . #Выводит строку
 grep -r -l -- "$search" . #Выводит только имя файла
 find . -type f -exec grep -l -- "$search" {} \;

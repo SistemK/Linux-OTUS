@@ -13,7 +13,7 @@
 Скачано ядро `4.14.37` из stable ветки
 
 Сборка ядра:
-```
+```bash
 cp /boot/config* . # Копируем конфиг текущего ядра в директорию с новым
 make menuconfig # GUI для создания конфига
 make && make install_modules && make install # Компилируем и устанавливаем
@@ -29,7 +29,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg # Применяем настройки
 
 Сборка прошла успешно. Удалось даже загрузиться в новое ядро.
 
-```
+```bash
 [root@otuslinux1 ~]# last
 root     pts/0        192.168.33.1     Thu Apr 26 23:51   still logged in   
 root     pts/0        192.168.33.1     Thu Apr 26 23:50 - 23:51  (00:01)    
