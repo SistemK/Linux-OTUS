@@ -141,7 +141,7 @@ yum-config-manager --add-repo https://yum.rumyantsev.com/centos/7/x86_64/
 
 3. Устанавливаем пропатченный Grub2
 
-`yum install grub2`
+`yum install grub2 -y --nogpgcheck`
 
 4. 
 
