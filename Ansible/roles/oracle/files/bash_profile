@@ -1,0 +1,44 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+
+# Oracle Settings
+export TMP=/tmp
+
+export ORACLE_HOSTNAME=oel7.dbaora.com
+export ORACLE_UNQNAME=ORA12C
+export ORACLE_BASE=/ora01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/12.2.0/db_1
+export ORACLE_SID=ORA12C
+
+PATH=/usr/sbin:$PATH:$ORACLE_HOME/bin
+
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib;
+export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib;
+
+alias cdob='cd $ORACLE_BASE'
+alias cdoh='cd $ORACLE_HOME'
+alias tns='cd $ORACLE_HOME/network/admin'
+alias envo='env | grep ORACLE'
+
+umask 022
+
+if [ $USER = "oracle" ]; then
+    if [ $SHELL = "/bin/ksh" ]; then
+       ulimit -u 16384 
+       ulimit -n 65536
+    else
+       ulimit -u 16384 -n 65536
+    fi
+fi
+
+envo

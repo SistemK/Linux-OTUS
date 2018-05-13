@@ -1,0 +1,37 @@
+# Postgre install from source
+
+- Delete packages postgresql-lib postgresql postgresql-odbc
+
+- Install packages:
+  - readline-devel libxml2-devel libxslt-devel wget tmux bzip2 git gcc make flex bison jade
+
+# See all flags ./configure --help
+- Make from source
+  - Make options
+      --prefix=/opt/$PG_NAME
+      --with-systemd
+      --with_libxml
+      --with_libxslt
+      --with-openssl
+      --with-ldap
+      --with-pam
+      # Add additional languages
+      --with-perl
+      --with-python
+      --with-tcl
+
+- Environment configuration
+
+- Add Autovacuum jobs to Cron
+
+- sysctl.conf config for postgres
+
+- limits.conf config for postgres
+
+- Additional software to use for administration
+    - tmux
+    - pgbouncer
+    - pgcenter
+    - pgBadger
+
+ 

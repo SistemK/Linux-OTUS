@@ -1,0 +1,40 @@
+-host
+-user
+-gather_info
+
+
+Prepare host for oracle installation
+
+- Fully update
+
+- Update kernel and verify it latest statement
+
+- Set timezone to Asia/Yekaterinburg
+
+- Set FQDN hostname 
+- Check for FQDN name in /etc/hosts
+
+- Add groups for database managment
+
+- Add user Oracle
+
+- Set user Oracle password
+
+- Install requiered packages
+
+- Add kernel parameters
+
+- Apply kernel parameters
+
+- Set shell limits for user oracle in file /etc/security/limits.conf
+
+- Check and disable Firewalld
+
+- Check and disable SELinux
+
+- Modify .bash_profile for user Oracle
+
+- Create directory structure 
+
+- Configure ssh server with X forwarding
+ 

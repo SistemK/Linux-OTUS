@@ -1,0 +1,8 @@
+---
+- hosts: all
+  user: root
+  gather_facts: yes
+  become: yes
+  roles:
+    - postfix
+    - apache

@@ -1,0 +1,36 @@
+---
+- hosts: web
+  gather_facts: true
+  tasks:
+  - name: Install packages for NetData
+    yum:
+      name:
+        - autoconf
+        - automake
+        - curl
+        - gcc
+        - git
+        - libmnl-devel
+        - libuuid-devel
+        - make
+        - MySQL-python
+        - nc
+        - pkgconfig 
+        - python
+        - python-psycopg2
+        - PyYAML
+        - zlib-devel
+        - wget
+
+  - name: Download latest NetData kickstart
+    get_url:
+      url: https://my-netdata.io/kickstart.sh
+      dest: /root/
+
+  - name: chmod NetData installer
+    file:
+      path: /root/kickstart.sh
+      mode: 'u=rwx,g=rwx,o=rwx'
+
+  - name: Install NetData
+    shell: cd /root && ./kickstart.sh --non-interactive

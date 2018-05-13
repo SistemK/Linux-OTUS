@@ -1,0 +1,35 @@
+- name: Istall Postfix
+  yum:
+    name:
+      - postfix
+      - cyrus-sasl-plain
+      - mailx
+
+- name: Start postfix service
+  service:
+    name: postfix
+    state: started
+
+- name: Enable postfix service
+  service:
+    name: postfix
+    enabled: True
+
+- name: Pushing config files
+  copy: 
+    src: "{{ item }}"
+    dest: /etc/postfix/
+  with_items:
+    - files/main.cf
+    - files/sasl_passwd
+
+- name: Execute shell commands
+  shell: "{{ item }}"
+  with_items:
+    - "postmap /etc/postfix/sasl_passwd"
+    - "chown root:postfix /etc/postfix/sasl_passwd*"
+    - "chmod 640 /etc/postfix/sasl_passwd*"
+  notify: reload postfix
+
+- name: Send test mail to administrator
+  shell: 'echo "This is a test from {{ ansible_hostname }}" | mail -s "Postfix" lalbrekht@gmail.com'

@@ -1,0 +1,144 @@
+- name: Adding needed repos
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Install my list of packages
+  yum:
+    name:
+      - tmux
+      - bash-completion
+      - vim
+      - python
+      - htop
+      - iotop
+      - python-psycopg2
+      - mailx
+      - tree
+    state: latest
+
+- name: Disabling SELinux
+  selinux:
+    state: disabled
+
+- name: Stop and disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: False
+
+- name: set timezone to Asia/Yekaterinburg
+  timezone:
+    name: Asia/Yekaterinburg
+
+- name: Creating vg for data folder
+  lvg:
+    vg: vg_data
+    pvs: /dev/sdb
+  tags: lvol
+
+- name: Creating an lvm for data folder
+  lvol:
+    vg: vg_data
+    lv: pg_data
+    size: +100%FREE
+    pvs: /dev/sdb
+  tags: lvol
+
+- name: Creating file system on lv
+  filesystem: 
+    fstype: ext4
+    dev: /dev/vg_data/pg_data
+  tags: lvol
+
+- name: Creating folder for data
+  file: path=/pgdata/ state=directory
+  tags: lvol
+
+- name: Mount data folder and add permissions
+  mount:
+    path: /pgdata
+    src: /dev/vg_data/pg_data
+    fstype: ext4
+    state: mounted
+  tags: lvol  
+
+- name: Add postgresql 9.4 repo
+  yum: 
+    name:
+      - https://download.postgresql.org/pub/repos/yum/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-3.noarch.rpm
+
+- name: Install postgresql 9.4 packages
+  yum:
+      name:
+       - postgresql94
+       - postgresql94-server
+
+- name: Add env variables to postgres user
+  replace:
+      path: /var/lib/pgsql/.bash_profile
+      regexp: PGDATA=/var/lib/pgsql/9.4/data
+      replace: PGDATA=/pgdata/db
+      backup: yes
+
+- name: Changing owner of pgdata folder
+  file:
+      path: /pgdata/db
+      state: directory
+      owner: postgres
+      group: postgres
+
+- name: Init DB
+  become: true
+  become_user: postgres 
+  shell: /usr/pgsql-9.4/bin/initdb -D /pgdata/db
+  tags: init
+
+- name: Creating postgresql log directory
+  file: path=/var/log/postgresql state=directory owner=postgres group=postgres
+
+- name: Copying postgresql.conf to remote hosts
+  copy: 
+    src: files/postgresql94.conf
+    dest: /pgdata/db/postgresql.conf
+    owner: postgres
+    group: postgres
+    backup: yes
+  tags:
+    - config
+
+- name: Start postgres
+  shell: su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start"
+  tags: start  
+
+
+- name: Start postgresql with systemstart
+  lineinfile:
+    path: /etc/rc.d/rc.local
+    line: su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start"
+    mode: 'u=rwx,g=rx,o=rx'
+  tags: rc
+
+- name: Create test database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: dvdrental
+  tags: db
+
+- name: Copy database example
+  copy:
+    src: files/dvdrental.tar
+    dest: /tmp/
+    owner: postgres
+    group: postgres
+  tags: db
+
+- name: Create demo database from dvdrental.tar
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: dvdrental
+    state: restore
+    target: /tmp/dvdrental.tar
+  tags: db  
